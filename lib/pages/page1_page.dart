@@ -1,3 +1,5 @@
+import 'package:estados_app/models/usuario.dart';
+import 'package:estados_app/services/usuario_service.dart';
 import 'package:flutter/material.dart';
 
 class Page1Page extends StatelessWidget {
@@ -9,7 +11,13 @@ class Page1Page extends StatelessWidget {
       appBar: AppBar(
         title: const Text('page1'),
       ),
-      body: const InformacionUsuario(),
+      body: StreamBuilder(
+          stream: usuarioService.usuarioStream,
+          builder: (BuildContext context, AsyncSnapshot<Usuario> snapshot) {
+            return snapshot.hasData
+                ? const InformacionUsuario()
+                : const Text('No existe usuario');
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {
           Navigator.pushNamed(context, 'page2'),
@@ -31,19 +39,19 @@ class InformacionUsuario extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       height: double.infinity,
       width: double.infinity,
-      child: const Column(
+      child: Column(
         children: [
-          Text('General',
+          const Text('General',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          Divider(),
-          ListTile(title: Text('Nombre: ')),
-          ListTile(title: Text('Edad: ')),
-          Text('Profesiones',
+          const Divider(),
+          ListTile(title: Text('Nombre: ${usuarioService.usuario.nombre} ')),
+          ListTile(title: Text('Edad: ${usuarioService.usuario.edad} ')),
+          const Text('Profesiones',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          Divider(),
-          ListTile(title: Text('Profesiones e')),
-          ListTile(title: Text('Profesiones e')),
-          ListTile(title: Text('Profesiones e')),
+          const Divider(),
+          ListTile(title: Text(usuarioService.usuario.profesiones[0])),
+          const ListTile(title: Text('Profesiones e')),
+          const ListTile(title: Text('Profesiones e')),
         ],
       ),
     );
